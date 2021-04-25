@@ -10,21 +10,13 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Use hardware clock in local time instead of UTC.
-  time.hardwareClockInLocalTime = true;
-
   # Set time zone.
   time.timeZone = "Asia/Shanghai";
-
-  # Set location.
-  location = {
-    latitude = 34.0;
-    longitude = 108.0;
-  };
 
   # Localization.
   i18n = {
     defaultLocale = "zh_CN.UTF-8";
+    extraLocaleSettings =  { LC_TIME = "en_US.UTF-8"; };
     supportedLocales = [ "zh_CN.UTF-8/UTF-8" "ja_JP.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
     inputMethod = {
       enabled = "ibus";
@@ -40,12 +32,15 @@
     isNormalUser = true;
     home = "/home/huizhi";
     extraGroups = [ "wheel" "networkmanager" ];
-    description = "Huizhi Yang";
+    description = "杨蕙芷";
     uid = 1000;
   };
 
   # Whether users of the wheel group must provide a password to run commands as super user via sudo. 
   security.sudo.wheelNeedsPassword = false; 
+
+  # Enable Font/DPI configuration optimized for HiDPI displays.
+  hardware.video.hidpi.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -53,19 +48,29 @@
   # Configure keymap in X11
   services.xserver.layout = "us";
 
-  # HiDPI.
-  services.xserver.dpi = 120;
-  # Enable Font/DPI configuration optimized for HiDPI displays.
-  hardware.video.hidpi.enable = true;
-
   # Fonts.
-  fonts.enableDefaultFonts = true;
-  fonts.fonts = with pkgs; [
-    sarasa-gothic
-  ];
-
+  fonts = {
+    enableDefaultFonts = true;
+    fontconfig = {
+      defaultFonts.monospace = [ "Sarasa Mono SC" ];
+      defaultFonts.sansSerif = [ "Sarasa Gothic SC" ];
+      defaultFonts.serif = [ "Source Han Serif SC" ];
+    };
+      fonts = with pkgs; [
+        sarasa-gothic
+        source-han-serif
+      ];
+  };
+  
   # Enable the Pantheon Desktop Environment.
   services.xserver.desktopManager.pantheon.enable = true;
+
+  # Which packages pantheon should exclude from the default environment.
+  environment.pantheon.excludePackages = with pkgs; [
+    pkgs.pantheon.elementary-camera
+  ];
+
+  services.system-config-printer.enable = false;
 
   # Enable xdg desktop integration.
   xdg.portal.enable = true;
@@ -80,12 +85,10 @@
 
   # Enable sound.
   sound.enable = true;
+  hardware.pulseaudio.enable = true;
 
   # Video drivers
   services.xserver.videoDrivers = [ "modesetting" ];
-
-  # Completely disable the NVIDIA graphics card and use the integrated graphics processor instead. 
-  hardware.nvidiaOptimus.disable = true;
 
   #  Enable the TLP power management daemon.
   services.tlp.enable = true;
@@ -95,7 +98,8 @@
 
   # Garbage collector.
   nix.gc.automatic = true;
-  nix.gc.options = "--delete-older-than 15d";
+  nix.gc.dates = "03:15";
+  nix.gc.options = "--delete-older-than 7d";
 
   # List of binary cache URLs used to obtain pre-built binaries of Nix packages.
   nix.binaryCaches = [ "https://mirrors.bfsu.edu.cn/nix-channels/store" ];
@@ -117,21 +121,25 @@
     neofetch
     neovim
     nodejs
-    ntfs3g
     proxychains
     scrcpy
     tdesktop
     texinfo
     typora
-    wpsoffice
+    unixtools.xxd
     you-get
   ];
 
   # Whether to enable the Vixie cron daemon.
-  services.cron.enable
+  services.cron.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  services.openssh.ports = [ 8765 ];
+
+  # Open ports in the firewall.
+  networking.firewall.allowedTCPPorts = [ 7890 8765 ];
+  networking.firewall.allowedUDPPorts = [ 7890 8765 ];
 
   # The NixOS release.
   system.stateVersion = "20.09";
