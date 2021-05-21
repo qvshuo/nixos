@@ -36,7 +36,7 @@
     uid = 1000;
   };
 
-  # Whether users of the wheel group must provide a password to run commands as super user via sudo. 
+  # Users of the wheel group must provide a password to run commands as super user via sudo. 
   security.sudo.wheelNeedsPassword = false; 
 
   # Enable Font/DPI configuration optimized for HiDPI displays.
@@ -65,11 +65,22 @@
   # Enable the Pantheon Desktop Environment.
   services.xserver.desktopManager.pantheon.enable = true;
 
+  # Indicators and plugs to add to Wingpanel. 
+  services.xserver.desktopManager.pantheon = {
+    extraWingpanelIndicators = with pkgs; [
+      pantheon.wingpanel-indicator-keyboard
+    ];
+    extraSwitchboardPlugs = with pkgs; [
+      pantheon.switchboard-plug-keyboard
+    ];
+  };
+
   # Which packages pantheon should exclude from the default environment.
   environment.pantheon.excludePackages = with pkgs; [
-    pkgs.pantheon.elementary-camera
+    pantheon.elementary-camera
   ];
 
+  # Disable printing.
   services.system-config-printer.enable = false;
 
   # Enable xdg desktop integration.
@@ -90,10 +101,10 @@
   # Video drivers
   services.xserver.videoDrivers = [ "modesetting" ];
 
-  #  Enable the TLP power management daemon.
+  # Enable the TLP power management daemon.
   services.tlp.enable = true;
 
-  # Whether to enable periodic SSD TRIM of mounted partitions in background.
+  # Enable periodic SSD TRIM of mounted partitions in background.
   services.fstrim.enable = true;
 
   # Garbage collector.
@@ -111,11 +122,8 @@
   environment.systemPackages = with pkgs; [
     clash
     dosfstools
-    drawio
-    firefox
     fish
     hugo
-    gimp
     git
     manpages
     neofetch
@@ -123,14 +131,12 @@
     nodejs
     proxychains
     scrcpy
-    tdesktop
     texinfo
-    typora
     unixtools.xxd
     you-get
   ];
 
-  # Whether to enable the Vixie cron daemon.
+  # Enable the Vixie cron daemon.
   services.cron.enable = true;
 
   # Enable the OpenSSH daemon.
@@ -140,6 +146,9 @@
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 7890 8765 ];
   networking.firewall.allowedUDPPorts = [ 7890 8765 ];
+
+  # Enable flatpak.
+  services.flatpak.enable = true;
 
   # The NixOS release.
   system.stateVersion = "20.09";
