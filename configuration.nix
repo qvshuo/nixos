@@ -17,7 +17,7 @@
   nix.gc.options = "--delete-older-than 7d";
 
   # List of binary cache URLs used to obtain pre-built binaries of Nix packages.
-  nix.binaryCaches = [ "https://mirrors.bfsu.edu.cn/nix-channels/store" ];
+  nix.binaryCaches = [ "https://mirror.sjtu.edu.cn/nix-channels/store" ];
 
   # Allow unfree.
   nixpkgs.config.allowUnfree = true;
