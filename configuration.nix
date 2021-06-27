@@ -29,14 +29,9 @@
     fish
     hugo
     git
-    manpages
     neofetch
     neovim
-    nodejs
     proxychains
-    scrcpy
-    texinfo
-    you-get
   ];
 
   # Enable the OpenSSH daemon.
