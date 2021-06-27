@@ -8,6 +8,7 @@ mkdir -p /mnt/boot
 mount /dev/disk/by-label/boot /mnt/boot
 mkdir -p /mnt/home
 mount /dev/disk/by-label/home /mnt/home
+swapon /nvme0n1p?
 ```
 
 ## Privilege 
@@ -16,10 +17,11 @@ mount /dev/disk/by-label/home /mnt/home
 sudo su
 ```
 
-## Generate and edit configuration file
+## Generate clone, and edit configuration file
 
 ```
 nixos-generate-config --root /mnt
+git clone https://github.com/qvshuo/nixos.git
 vim /mnt/etc/nixos/configuration.nix
 ```
 
