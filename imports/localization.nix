@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
 {
+  # Use hardware clock in local time instead of UTC.
+  time.hardwareClockInLocalTime = true;
+  
   # Set time zone.
   time.timeZone = "Asia/Shanghai";
 

@@ -7,10 +7,6 @@
   services.gnome.core-utilities.enable = false;
 
   environment.systemPackages = with pkgs.gnome; [
-    eog
-    gnome-calculator
-    gnome-system-monitor
-    gnome-weather
-    nautilus
+
   ];
 }
