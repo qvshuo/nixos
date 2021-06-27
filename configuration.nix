@@ -4,12 +4,15 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./imports/gdm.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Enable Plymouth boot splash screen.
+  boot.plymouth.enable = true;
 
   # Update the CPU microcode for Intel processors.
   hardware.cpu.intel.updateMicrocode = true;
@@ -52,18 +55,42 @@
 
   # Enable the X server.
   services.xserver.enable = true;
+
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-  services.gnome.core-utilities.enable = false;
 
+  # Packages excluded from the default environment.
+  environment.gnome.excludePackages =  with pkgs.gnome; [
+    baobab
+    cheese
+    epiphany
+    gedit
+    gnome-calculator
+    gnome-calendar
+    gnome-characters
+    gnome-clocks
+    gnome-contacts
+    gnome-font-viewer
+    gnome-logs
+    gnome-maps
+    gnome-music
+    pkgs.gnome-photos
+    gnome-screenshot
+    gnome-system-monitor
+    gnome-weather
+    pkgs.gnome-connections
+    simple-scan
+    totem
+    yelp
+  ];
 
-  # Add user.
+  # User.
   users.users.huizhi = {
     isNormalUser = true;
     home = "/home/huizhi";
     extraGroups = [ "wheel" "networkmanager" ];
-    description = "杨蕙芷";
+    description = "YHZ";
     uid = 1000;
   };
   security.sudo.wheelNeedsPassword = false;
@@ -71,7 +98,7 @@
 
   # Garbage collector.
   nix.gc.automatic = true;
-  nix.gc.dates = "04:00";
+  nix.gc.dates = "05:00";
   nix.gc.options = "--delete-older-than 7d";
 
 
@@ -83,24 +110,15 @@
 
   # The set of packages that appear in /run/current-system/sw.
   environment.systemPackages = with pkgs; [
-    gnome.eog
-    gnome.file-roller p7zip unrar
-    gnome.nautilus gnome.sushi ffmpegthumbnailer 
-    gnome.gnome-terminal
-    gnome.gnome-tweaks
-    gnomeExtensions.blur-my-shell
-    gnomeExtensions.clipboard-indicator
-    gnomeExtensions.just-perfection
-    gnomeExtensions.night-theme-switcher
-    gnomeExtensions.shu-zhi
-    gnomeExtensions.window-is-ready-notification-remover
     clash
+    firefox
     fish
     hugo
     git
     neofetch
     neovim
     proxychains
+    vscode
   ];
 
   # Enable the OpenSSH daemon.
